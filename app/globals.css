@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 0, 128, 128;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: rgb(var(--background-rgb));
+  font-family: "MS Sans Serif", sans-serif;
+  user-select: none;
+  height: 100vh;
+  cursor: default;
+  color: rgb(var(--foreground-rgb));
+}
+
+.window-header {
+  cursor: move;
+}
+
+.window-control {
+  cursor: pointer;
+}
+
+.has-event::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: red;
+  border-radius: 50%;
+}
+
+.thought-bubble::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #ffffcc;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  top: -10px;
+  left: 20px;
+  transform: rotate(45deg);
+  z-index: -1;
+}
