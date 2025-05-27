@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { start } from "repl"
 
 export function useGameState() {
   const [gameTime, setGameTime] = useState(0)
@@ -8,6 +9,9 @@ export function useGameState() {
   const [socialMeter, setSocialMeter] = useState(50)
   const [academicMeter, setAcademicMeter] = useState(40)
   const [wellbeingMeter, setWellbeingMeter] = useState(45)
+  const [gameStarted, setGameStarted] = useState(false)
+  const [gamePaused, setGamePaused] = useState(false)
+  const [gameOver, setGameOver] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,5 +67,7 @@ export function useGameState() {
     decreaseAcademicMeter,
     increaseWellbeingMeter,
     decreaseWellbeingMeter,
+    gameStarted,
+    startGame: () => setGameStarted(true),
   }
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useState, useEffect } from "react"
 import Taskbar from "@/components/desktop/taskbar"
 import DesktopIcon from "@/components/desktop/desktop-icon"
@@ -13,15 +14,18 @@ import HealthWindow from "@/components/windows/health-window"
 import ThoughtBubble from "@/components/ui/thought-bubble"
 import Notification from "@/components/ui/notification"
 import { useGameState } from "@/hooks/use-game-state"
+import StartScreen from "../screens/StartScreen"
 
 export default function Desktop() {
   const [activeWindow, setActiveWindow] = useState<string | null>(null)
   const [openWindows, setOpenWindows] = useState<string[]>([])
   const [thought, setThought] = useState<string | null>(null)
   const [notification, setNotification] = useState<string | null>(null)
-
+  const [username, setUsername] = useState<string | null>(null)	
   const {
     gameTime,
+    gameStarted,
+    startGame,
     stressLevel,
     socialMeter,
     academicMeter,
@@ -34,6 +38,11 @@ export default function Desktop() {
     decreaseAcademicMeter,
     decreaseWellbeingMeter,
   } = useGameState()
+
+  const handleStartGame = (username: string) => {
+    setUsername(username)
+    startGame()
+  }
 
   const openWindow = (windowId: string) => {
     if (!openWindows.includes(windowId)) {
@@ -72,6 +81,7 @@ export default function Desktop() {
 
   // Game loop and random events
   useEffect(() => {
+    if(!gameStarted) return
     const gameLoopInterval = setInterval(() => {
       // Gradually increase stress if nothing is done
       if (gameTime % 100 === 0) {
@@ -126,12 +136,25 @@ export default function Desktop() {
       clearInterval(gameLoopInterval)
       clearTimeout(initialEventsTimeout)
     }
-  }, [gameTime, openWindows])
+  }, [gameTime, openWindows,gameStarted])
+
+    if(!gameStarted){
+    return <StartScreen onStartGame={handleStartGame} />
+  }
 
   return (
-    <div className="desktop h-screen w-full relative overflow-hidden p-5 bg-[#008080] cursor-default select-none">
+    <div className="desktop h-screen w-full relative overflow-hidden p-5 cursor-default select-none">
+      {/* Desktop Background */}
+      <Image
+        src="/backgrounds/xp-bliss.jpg"
+        alt="Windows XP Desktop Background"
+        fill
+        className="object-cover"
+        priority
+      />
+
       {/* Desktop Icons */}
-      <div className="flex flex-wrap">
+      <div className="relative z-10 h-full w-full p-5">
         <DesktopIcon id="email" label="Correo" onClick={() => openWindow("email")} />
         <DesktopIcon id="todo" label="Tareas" onClick={() => openWindow("todo")} />
         <DesktopIcon id="calendar" label="Calendario" onClick={() => openWindow("calendar")} />
